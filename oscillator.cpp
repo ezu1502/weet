@@ -1,4 +1,13 @@
 #include "oscillator.hpp"
+#include <cmath>
+
+void Oscillator::set_frequency(float f){
+    frequency = f;
+}
+
+void Oscillator::set_amplitude(float a){
+    amplitude = a;
+}
 
 float Oscillator::get_sample(){
 
@@ -13,11 +22,17 @@ float Oscillator::get_sample(){
         case Waveform::SAW:
             result = get_saw();
             break;
+        case Waveform::TRIANGLE:
+            result = get_triangle();
+            break; 
+        case Waveform::ARC:
+            result = get_arc();
+            break;
     }
 
     sampleIndex++;
 
-    return result;
+    return amplitude * result;
 }
 void Oscillator::set_waveform(Waveform wv){
     waveform = wv;
@@ -29,9 +44,41 @@ float Oscillator::get_sine(){
 }
 
 float Oscillator::get_square(){
-    return 0.0f;
+    double time = static_cast<double>(sampleIndex) / sampleRate;
+
+    double cycles = time * frequency;
+
+    if (std::fmod(cycles, 1) > 0.5){
+        return 1.0f;
+    }
+    else {
+        return -1.0f;
+    }
 }
 
 float Oscillator::get_saw(){
-    return 0.0f;
+    double time = static_cast<double>(sampleIndex) / sampleRate;
+
+    double cycles = time * frequency;
+
+    return -2 * (std::fmod(cycles, 1) - 0.5);
 }
+
+float Oscillator::get_triangle(){
+    double time = static_cast<double>(sampleIndex) / sampleRate;
+
+    double cycles = time * frequency;
+
+    return 2 *(std::abs(std::fmod(cycles, 1)) - 0.5);
+}
+
+float Oscillator::get_arc(){
+    double time = static_cast<double>(sampleIndex) / sampleRate;
+
+    double phase = std::fmod(time * frequency, 1);
+
+    double x = (phase - 0.5);
+    double y = std::sqrt(0.25 - x*x);
+
+    return phase < 0.5 ? 2*y : -2*y;
+}   
