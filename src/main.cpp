@@ -39,10 +39,10 @@ int main(int argc, char *argv[]){
 
     float frequency = std::stof(argv[1]);
 
-    Oscillator oscillator(frequency, Waveform::ARC);
+    Oscillator oscillator(frequency, Waveform::SINE);
 
     ma_device device = create_audio_device(&oscillator, sampleRate, data_callback);
     while(true){
-
+        
     }
 }
