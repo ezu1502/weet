@@ -1,5 +1,9 @@
-#include <QtGlobal>
+#include <QQmlContext>
+#include "window.hpp"
 
-int test_window(){
-    return 0;
-}
+
+int Window::run(){
+    engine.rootContext()->setContextProperty("audio", &audio);
+    engine.loadFromModule("Weet", "Main");
+    return app.exec();
+}   
