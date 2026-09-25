@@ -17,6 +17,9 @@ public:
     Q_INVOKABLE void start();
     Q_INVOKABLE void stop();
 
+    Q_INVOKABLE void set_frequency(float value);
+    Q_INVOKABLE void set_gain(float value);
+
 private:
     Oscillator oscillator;
     ma_device device{};

@@ -53,6 +53,14 @@ void Audio::stop(){
     }
 }
 
+void Audio::set_frequency(float value){
+    oscillator.set_frequency(value);
+}
+
+void Audio::set_gain(float value){
+    oscillator.set_amplitude(value);
+}
+
 Audio::~Audio(){
     ma_device_uninit(&device);
 }

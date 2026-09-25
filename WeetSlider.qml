@@ -3,14 +3,15 @@ import QtQuick.Controls.Basic
 
 Item {
     id: root
+
     signal valueUpdate(real value)
 
     property string name: "Null"
-    
+
     property real value: 0.5
 
-    property real minimumValue: 0.0
     property real maximumValue: 1.0
+    property real minimumValue: 0.0
 
     property real maxValue: 100
     property real minValue: 0
@@ -19,10 +20,8 @@ Item {
 
     property bool percentageValue: true
 
-    property real sensitivity: 10
-
-    width: 90
-    height: 110
+    width: 200
+    height: 70
 
     
     Rectangle {
@@ -60,39 +59,40 @@ Item {
     }
 
     Rectangle {
-        id: knob
+        id: trail
 
-        width: 50
-        height: width
+        width: 150
+        height: 15
 
-        radius: width / 2
+        radius: 0
 
         color: '#181818' 
 
         anchors.centerIn: parent
 
-        border.width: 1
-        border.color: "#488497"
+        // border.width: 1
+        // border.color: "#488497"
 
         MouseArea {
             id: mA
 
+            hoverEnabled: true
+
             anchors.fill: parent
 
-
             property real startValue
-            property real startY
+            property real startX
 
             onPressed: {
                 startValue = root.value
-                startY = mouseY
+                startX = mouseX
             }
 
             onPositionChanged: {
                 if (!pressed)
                     return
 
-                var delta = (startY - mouseY) * (root.sensitivity / 2000)
+                var delta = (mouseX - startX) / trail.width
 
                 root.value = Math.max(
                     root.minimumValue,
@@ -101,25 +101,36 @@ Item {
             }
 
             onReleased: {
-                root.valueUpdate((root.minValue + root.value * (root.maxValue - root.minValue)))
+                root.valueUpdate(root.minValue + root.value * (root.maxValue - root.minValue))
             }
+        }
+
+        Rectangle {
+            anchors.left: parent.left
+            height: parent.height
+            width: (root.value - root.minimumValue) / (root.maximumValue - root.minimumValue) * parent.width
+            color: '#254258'
         }
     }
 
     Rectangle {
-        width: 3
-        height: knob.width / 2 - 2
+        width: 8
+        height: 20
 
-        radius: 1.5
+        radius: 2
 
-        color: "#488497"
+        color: mA.pressed ? "#00e1ff" : mA.containsMouse ? '#157c9b' : "#488497"
 
-        anchors.horizontalCenter: knob.horizontalCenter
-        anchors.bottom: knob.verticalCenter
+        anchors.verticalCenter: trail.verticalCenter
+        anchors.horizontalCenter: trail.left
 
-        transformOrigin: Item.Bottom
+        transform: Translate {x: (root.value / root.maximumValue) * trail.width}
 
-        rotation: -110 + (root.value * 220)
+        Behavior on color {
+            ColorAnimation {
+                duration: 200
+            }
+        }
     }
 
     Text {
@@ -130,7 +141,7 @@ Item {
         font.family: "Aptos"
         font.pixelSize: 12
 
-        text: root.percentageValue ? `${(root.value * 100).toFixed(2)}%`
+        text: root.percentageValue ? `${(root.value * 100).toFixed(0)}%`
         :  `${(root.minValue + root.value * (root.maxValue - root.minValue)).toFixed(2)}${root.unit}`
 
         anchors.bottom: root.bottom

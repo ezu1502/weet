@@ -33,9 +33,44 @@ ApplicationWindow {
             playing = !playing
         }
     }
+    Row {
+        spacing: 20
+        anchors.centerIn: parent
 
-    Knob {
-        name: "Gain"
+        
+        Knob {
+            name: "Gain"
+
+            percentageValue: false
+            
+            value: 0.5
+            minValue: 0
+            maxValue: 200
+
+            unit: "%"
+
+            onValueUpdate: function(value){
+                audio.set_gain(value/100)
+            }
+        }
+
+        WeetSlider {
+            name: "Frequency"
+
+            percentageValue: false
+            
+            value: 440 / 22000
+            minValue: 0
+            maxValue: 22000
+
+
+            unit: "Hz"
+
+            onValueUpdate: function(value) {
+                audio.set_frequency(value)
+            }
+        }
     }
+    
 }
 

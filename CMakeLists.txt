@@ -24,6 +24,7 @@ qt_add_qml_module(weet
         Main.qml
         WeetButton.qml
         Knob.qml
+        WeetSlider.qml
 )
 
 target_include_directories(weet PRIVATE
