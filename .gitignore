@@ -5,3 +5,5 @@
 build/
 
 make_build.txt
+
+*.svg

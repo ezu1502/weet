@@ -15,6 +15,7 @@ qt_add_executable(weet
     src/oscillator.cpp
     src/window.cpp
     src/audio.cpp
+    app.rc
 )
 
 qt_add_qml_module(weet
@@ -25,7 +26,10 @@ qt_add_qml_module(weet
         WeetButton.qml
         Knob.qml
         WeetSlider.qml
-)
+        WeetRadioButton.qml
+    RESOURCES
+        logo/weet_logo.png
+    )
 
 target_include_directories(weet PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src

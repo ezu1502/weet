@@ -1,6 +1,10 @@
 #include <stdexcept>
+#include <vector>
+#include <stdexcept>
 
 #include "audio.hpp"
+
+std::vector<Waveform> waves = {Waveform::SINE, Waveform::SQUARE, Waveform::SAW, Waveform::TRIANGLE, Waveform::ARC};
 
 void data_callback(ma_device *device, void *output, const void *input, ma_uint32 frameCount){
     Oscillator *osc = static_cast<Oscillator*>(device->pUserData);
@@ -63,4 +67,15 @@ void Audio::set_gain(float value){
 
 Audio::~Audio(){
     ma_device_uninit(&device);
+}
+
+void Audio::set_waveform(int choice){
+    
+    
+
+    if (choice < 0 || choice >= static_cast<int>(waves.size())){
+        throw std::invalid_argument("Invalid index");
+    }
+
+    oscillator.set_waveform(waves[choice]);
 }

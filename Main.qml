@@ -17,10 +17,10 @@ ApplicationWindow {
 
         text: playing ? "Stop" : "Start"
 
-        anchors.top: parent.top
+        anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
 
-        anchors.topMargin: 20
+        anchors.bottomMargin: 20
 
         onClicked: {
             if (playing){
@@ -33,43 +33,106 @@ ApplicationWindow {
             playing = !playing
         }
     }
-    Row {
+   
+    ButtonGroup {
+        id: waveformGroup
+    }
+    Column {
         spacing: 20
+
         anchors.centerIn: parent
 
-        
-        Knob {
-            name: "Gain"
+        Row {
+            spacing: 20
+            WeetRadioButton {
+                text: "Sine"
+                ButtonGroup.group: waveformGroup
+                checked: true
 
-            percentageValue: false
+                onClicked: {
+                    audio.set_waveform(0)
+                }
+            }
+
+            WeetRadioButton {
+                text: "Square"
+                ButtonGroup.group: waveformGroup
+
+                onClicked: {
+                    audio.set_waveform(1)
+                }
+            }
+
+            WeetRadioButton {
+                text: "Sawtooth"
+                ButtonGroup.group: waveformGroup
+
+                onClicked: {
+                    audio.set_waveform(2)
+                }
+            }
+
+            WeetRadioButton {
+                text: "Triangle"
+                ButtonGroup.group: waveformGroup
+
+                onClicked: {
+                    audio.set_waveform(3)
+                }
+            }
+
+            WeetRadioButton {
+                text: "Arc"
+                ButtonGroup.group: waveformGroup
+
+                onClicked: {
+                    audio.set_waveform(4)
+                }
+            }
+        }
+    
+
+
+        Row {
+            spacing: 20
             
-            value: 0.5
-            minValue: 0
-            maxValue: 200
 
-            unit: "%"
+            
+            Knob {
+                name: "Gain"
 
-            onValueUpdate: function(value){
-                audio.set_gain(value/100)
+                percentageValue: false
+                
+                value: 0.5
+                minValue: 0
+                maxValue: 200
+
+                unit: "%"
+
+                onValueUpdate: function(value){
+                    audio.set_gain(value/100)
+                }
+            }
+
+            WeetSlider {
+                name: "Frequency"
+
+                percentageValue: false
+                
+                value: 440 / 22000
+                minValue: 0
+                maxValue: 22000
+
+
+                unit: "Hz"
+
+                onValueUpdate: function(value) {
+                    audio.set_frequency(value)
+                }
             }
         }
 
-        WeetSlider {
-            name: "Frequency"
-
-            percentageValue: false
-            
-            value: 440 / 22000
-            minValue: 0
-            maxValue: 22000
-
-
-            unit: "Hz"
-
-            onValueUpdate: function(value) {
-                audio.set_frequency(value)
-            }
-        }
+       
     }
     
 }

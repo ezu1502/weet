@@ -20,6 +20,8 @@ public:
     Q_INVOKABLE void set_frequency(float value);
     Q_INVOKABLE void set_gain(float value);
 
+    Q_INVOKABLE void set_waveform(int choice);
+
 private:
     Oscillator oscillator;
     ma_device device{};
